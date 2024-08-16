@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Species Predictor</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2>Iris Species Predictor</h2>
+            <p class="lead">Machine Learning-based Web App for Iris species detection</p>
+        </div>
+
+        <form action="{{ url_for('analyze') }}" method="POST" class="row g-3">
+            <div class="col-md-6">
+                <label for="sepal_lengthInput" class="form-label">Sepal Length (cm)</label>
+                <input type="range" step="0.1" class="form-range" id="sepal_lengthInput" name="sepal_length" min="4" max="8" value="6" required>
+                <span id="sepal_lengthValue" class="form-text">6.0</span> cm
+            </div>
+            <div class="col-md-6">
+                <label for="sepal_widthInput" class="form-label">Sepal Width (cm)</label>
+                <input type="range" step="0.1" class="form-range" id="sepal_widthInput" name="sepal_width" min="2" max="5" value="3" required>
+                <span id="sepal_widthValue" class="form-text">3.0</span> cm
+            </div>
+            <div class="col-md-6">
+                <label for="petal_lengthInput" class="form-label">Petal Length (cm)</label>
+                <input type="range" step="0.1" class="form-range" id="petal_lengthInput" name="petal_length" min="1" max="7" value="4" required>
+                <span id="petal_lengthValue" class="form-text">4.0</span> cm
+            </div>
+            <div class="col-md-6">
+                <label for="petal_widthInput" class="form-label">Petal Width (cm)</label>
+                <input type="range" step="0.1" class="form-range" id="petal_widthInput" name="petal_width" min="0" max="3" value="1" required>
+                <span id="petal_widthValue" class="form-text">1.0</span> cm
+            </div>
+
+            <!-- Hidden input for model selection -->
+            <input type="hidden" name="model_choice" value="logitmodel">
+
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-primary">Predict</button>
+                <button type="reset" class="btn btn-secondary">Clear</button>
+            </div>
+        </form>
+
+        {% if result_prediction %}
+        <div class="mt-5">
+            <h5 class="text-center">Prediction Result</h5>
+            <p class="text-center">Using Logistic Regression</p>
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Predicted Iris Species: {{ result_prediction[0] }}</h5>
+                </div>
+                <div class="card-footer">
+                    {% if result_prediction == ['versicolor'] %}
+                        <img src="static/imgs/iris_versicolor.jpg" alt="Iris Versicolor" class="img-fluid">
+                    {% elif result_prediction == ['setosa'] %}
+                        <img src="static/imgs/iris_setosa.jpg" alt="Iris Setosa" class="img-fluid">
+                    {% elif result_prediction == ['virginica'] %}
+                        <img src="static/imgs/iris_virginica.jpg" alt="Iris Virginica" class="img-fluid">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Update the displayed value when the range input changes
+        const sepalLengthInput = document.getElementById('sepal_lengthInput');
+        const sepalWidthInput = document.getElementById('sepal_widthInput');
+        const petalLengthInput = document.getElementById('petal_lengthInput');
+        const petalWidthInput = document.getElementById('petal_widthInput');
+
+        const sepalLengthValue = document.getElementById('sepal_lengthValue');
+        const sepalWidthValue = document.getElementById('sepal_widthValue');
+        const petalLengthValue = document.getElementById('petal_lengthValue');
+        const petalWidthValue = document.getElementById('petal_widthValue');
+
+        sepalLengthInput.addEventListener('input', function() {
+            sepalLengthValue.textContent = sepalLengthInput.value;
+        });
+
+        sepalWidthInput.addEventListener('input', function() {
+            sepalWidthValue.textContent = sepalWidthInput.value;
+        });
+
+        petalLengthInput.addEventListener('input', function() {
+            petalLengthValue.textContent = petalLengthInput.value;
+        });
+
+        petalWidthInput.addEventListener('input', function() {
+            petalWidthValue.textContent = petalWidthInput.value;
+        });
+    </script>
+</body>
+</html>
